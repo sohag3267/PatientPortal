@@ -1,0 +1,79 @@
+﻿@using ApplicationCore.Enums;
+@model ApplicationCore.Entities.Patient
+
+<input type="hidden" asp-for="Id" class="form-control" />
+<div class="form-group">
+    <label asp-for="PatientName" class="control-label">Patient Name</label>
+    <input required asp-for="PatientName" class="form-control" />
+    <span asp-validation-for="PatientName" class="text-danger"></span>
+</div>
+<div class="form-group mt-3">
+    <label asp-for="DiseaseId" class="control-label">Diseases Name</label>
+    <select required asp-for="DiseaseId" class="form-control"></select>
+    <span asp-validation-for="DiseaseId" class="text-danger"></span>
+</div>
+<div class="form-group mt-3">
+    <label asp-for="EpilepsyType" class="control-label">Epilepsy</label>
+    <select required asp-for="EpilepsyType" class="form-control">
+        @foreach (var epilepsy in Enum.GetValues(typeof(Epilepsy)).Cast<Epilepsy>())
+        {
+            <option value="@(Convert.ToInt32(epilepsy))">@epilepsy</option>
+        }
+    </select>
+    <span asp-validation-for="EpilepsyType" class="text-danger"></span>
+</div>
+<div>
+    <div class="row mt-3">
+        <div class="col-sm-5">
+            <label>Other NCDs</label>
+            <select id="fromNCD" multiple="multiple" class="form-control">
+            </select>
+        </div>
+        <div class="col-sm-2 row align-items-center">
+            <div class="col">
+                <button type="button" style="width:80px" id="addNCD" class="btn btn-light">Add ></button>
+            </div>
+            <div class="col">
+                <button type="button" id="removeNCD" class="btn btn-light"> < Remove</button>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <select id="toNCD" multiple="multiple" class="form-control">
+            </select>
+        </div>
+    </div>
+    <input type="hidden" asp-for="SelectedNCDs" />
+</div>
+
+<div>
+    <div class="row mt-3">
+        <div class="col-sm-5">
+
+            <label>Allergies</label>
+            <select id="fromAllergies" multiple="multiple" class="form-control">
+            </select>
+
+        </div>
+        <div class="col-sm-2 row align-items-center ">
+            <div class="col">
+                <button type="button" style="width:80px" id="addAllergies" class="btn btn-light">Add ></button>
+            </div>
+            <div class="col">
+                <button type="button" id="removeAllergies" class="btn btn-light"> < Remove</button>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <select id="toAllergies" multiple="multiple" class="form-control">
+            </select>
+        </div>
+    </div>
+    <input type="hidden" asp-for="SelectedAllergies" />
+</div>
+
+
+ 
+   
+
+
+
+

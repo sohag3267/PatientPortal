@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient List</title>
+    @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <a asp-controller="Patients" asp-action="Create" class="btn btn-primary">Add Patient</a>
+    </div>
+    <h1>Patient List</h1>
+    <table id="patientTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    @section Scripts {
+        <script>
+
+
+            (function () {
+                const patientTableData = async () => {
+                    const url = "/api/PatientInformation/GetAllPatient";
+                    const response = await GetAjax(url);
+
+                    var tableBody = $('#patientTable tbody');
+                    tableBody.empty();
+                    $.each(response, function (index, Patient) {
+                        var row = '<tr>' +
+                            '<td>' + Patient.id + '</td>' +
+                            '<td>' + Patient.patientName + '</td>' +
+                            '<td>' +
+                            '<button class="updateBtn" data-id="' + Patient.id + '">Update</button>' +
+                            '<button class="detailsBtn" data-id="' + Patient.id + '">Details</button>' +
+                            '<button class="deleteBtn" data-id="' + Patient.id + '">Delete</button>' +
+                            '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+                }
+
+                const deletePatient = async patientId => {
+                    const url = "/api/PatientInformation/Delete" + "/" + patientId;
+                    let response = await DeleteAjax(url);
+                    
+                    if (response) {
+                        alert("Delete has been success fully");
+                        patientTableData();
+                    }
+                }
+
+                $(document).ready(function () {
+                    patientTableData();
+                });
+
+                $('#patientTable').on('click', '.updateBtn', function () {
+                    const patientId = $(this).data('id');
+                    window.location.href = '/Patients/Edit/' + patientId;
+                });
+                $('#patientTable').on('click', '.detailsBtn', function () {
+                    const patientId = $(this).data('id');
+
+                    window.location.href = '/Patients/Details/' + patientId;
+                });
+                $('#patientTable').on('click', '.deleteBtn', function () {
+                    const patientId = $(this).data('id');
+                    deletePatient(patientId);
+                });
+
+
+                
+                function DeleteAjax(destination) {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: destination,
+                            type: "DELETE",
+                            success: function (response) {
+                                resolve(response);
+                            }, error: function (response) {
+                                reject(response);
+                            }
+                        });
+                    });
+                }
+
+                function GetAjax(destination) {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: destination,
+                            method: "GET",
+                            dataType: "JSON",
+                            success: function (response) {
+                                resolve(response);
+                            },
+                            error: function (response) {
+                                reject(response);
+                            }
+                        });
+                    });
+                }
+            })();
+
+
+        </script>
+    }
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿@using ApplicationCore.Enums;
+@model ApplicationCore.Entities.Patient
+@{
+    ViewData["Title"] = "Create Patient";
+}
+
+<h2>Create Patient</h2>
+
+<form id="createPatient">
+    @await Html.PartialAsync("_patientPartial", Model)
+    <div class="form-group mt-3">
+        <input type="button" id="save" value="Create" class="btn btn-primary" />
+        <a asp-controller="Patients" asp-action="PatientsList" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+@section Scripts {
+    <script src="~/js/patients.js"></script>
+}
+
+
